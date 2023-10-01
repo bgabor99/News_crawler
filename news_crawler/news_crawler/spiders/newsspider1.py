@@ -4,7 +4,7 @@ import psycopg2
 
 class NewsSpider(scrapy.Spider):
     name = 'news'
-    start_urls = ['https://example.com/news']
+    start_urls = ['https://cybersecuritynews.com/']
 
     def parse(self, response):
         # Loop through the article links and follow them
@@ -14,9 +14,11 @@ class NewsSpider(scrapy.Spider):
     def parse_article(self, response):
         # Extract article data
         article = NewsScraperItem()
-        article['id'] = response.url.split('/')[-1]  # Article ID from URL - unique?
+        article['id'] = response.url.split('/')[-1]  # Article ID / string! from URL - unique?
         article['title'] = response.css('h1::text').get()
         article['content'] = ' '.join(response.css('p::text').extract())
+
+        print("Aricle: ", article)
 
         # Save article data to PostgreSQL # TODO
         yield article
