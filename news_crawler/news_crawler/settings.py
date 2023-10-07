@@ -60,6 +60,16 @@ ROBOTSTXT_OBEY = True
 #    "scrapy.extensions.telnet.TelnetConsole": None,
 #}
 
+DATABASES = {
+    'default': {
+        'NAME': 'your_database_name',
+        'USER': 'your_database_user',
+        'PASSWORD': 'your_database_password',
+        'HOST': 'localhost',
+        'PORT': '5432',  # Default PostgreSQL port
+    }
+}
+
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
