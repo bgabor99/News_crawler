@@ -62,8 +62,8 @@ ROBOTSTXT_OBEY = True
 
 DATABASES = {
     'default': {
-        'NAME': 'your_database_name',
-        'USER': 'your_database_user',
+        'NAME': 'news_crawler',
+        'USER': 'admin_spider',
         'PASSWORD': 'your_database_password',
         'HOST': 'localhost',
         'PORT': '5432',  # Default PostgreSQL port
