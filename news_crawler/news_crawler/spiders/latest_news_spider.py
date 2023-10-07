@@ -17,13 +17,6 @@ class LatestNewsSpider(scrapy.Spider):
         article['id'] = response.url.split('/')[-2]  # Article ID / string! from URL - unique?
         article['title'] = response.xpath('/html/head/title/text()').get()
         article['body'] = response.xpath('/html/body').get()
+        # article['content'] = response.xpath("//div[@class='td-ss-main-content'][1]").get() -- TODO
 
-        
-        print("ARTICLE")
-        print(article['id'])
-        print(article['title'])
-        print(article['body'])
-        
-        # Save article data to PostgreSQL # TODO
         yield article
-
