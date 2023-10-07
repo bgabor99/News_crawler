@@ -15,11 +15,9 @@ class NewsSpider(scrapy.Spider):
         # Extract article data
         article = NewsCrawlerItem()
         article['id'] = response.url.split('/')[-2]  # Article ID / string! from URL - unique?
-        # article['title'] = response.css('h1::text').get()
-        # article['content'] = ' '.join(response.css('p::text').extract())
-
-        print("MyArticle: ", article['id'])
-
+        article['title'] = response.xpath('/html/head/title/text()').get()
+        article['body'] = response.xpath('/html/body').get()
+        
         # Save article data to PostgreSQL # TODO
         yield article
 
