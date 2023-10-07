@@ -1,7 +1,15 @@
 -- -- DROP DATABASE IF EXISTS news_crawler;
 -- CREATE DATABASE news_crawler;
--- DROP SCHEMA IF EXISTS news_crawler news_crawler;
+-- DROP SCHEMA IF EXISTS news_crawler CASCADE;
 CREATE SCHEMA IF NOT EXISTS news_crawler;
+
+-- REASSIGN OWNED BY admin_spider TO postgres;  -- or some other trusted role
+-- DROP OWNED BY admin_spider;
+-- DROP USER IF EXISTS admin_spider;
+-- CREATE USER admin_spider WITH ENCRYPTED PASSWORD 'password'; -- set your password
+-- GRANT ALL PRIVILEGES ON DATABASE "news_crawler" to admin_spider;
+-- GRANT ALL PRIVILEGES ON SCHEMA "news_crawler" to admin_spider;
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "news_crawler" to admin_spider; -- if tables already exist
 
 -- DROP TABLE IF EXISTS news_crawler.article CASCADE;
 CREATE TABLE news_crawler.article (
