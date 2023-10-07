@@ -2,8 +2,8 @@ import scrapy
 import psycopg2
 from ..items import NewsCrawlerItem
 
-class NewsSpider(scrapy.Spider):
-    name = 'newsspider'
+class LatestNewsSpider(scrapy.Spider):
+    name = 'latestnewsspider'
     start_urls = ['https://cybersecuritynews.com/']
 
     def parse(self, response):
@@ -17,7 +17,6 @@ class NewsSpider(scrapy.Spider):
         article['id'] = response.url.split('/')[-2]  # Article ID / string! from URL - unique?
         article['title'] = response.xpath('/html/head/title/text()').get()
         article['body'] = response.xpath('/html/body').get()
-        
-        # Save article data to PostgreSQL # TODO
-        yield article
+        # article['content'] = response.xpath("//div[@class='td-ss-main-content'][1]").get() -- TODO
 
+        yield article

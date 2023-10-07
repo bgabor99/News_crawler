@@ -60,11 +60,21 @@ ROBOTSTXT_OBEY = True
 #    "scrapy.extensions.telnet.TelnetConsole": None,
 #}
 
+DATABASES = {
+    'default': {
+        'NAME': 'news_crawler',
+        'USER': 'admin_spider',
+        'PASSWORD': 'your_database_password',
+        'HOST': 'localhost',
+        'PORT': '5432',  # Default PostgreSQL port
+    }
+}
+
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "news_crawler.pipelines.NewsCrawlerPipeline": 300,
-#}
+ITEM_PIPELINES = {
+    "news_crawler.pipelines.NewsCrawlerPipeline": 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
