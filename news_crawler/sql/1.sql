@@ -10,6 +10,7 @@ CREATE SCHEMA IF NOT EXISTS news_crawler;
 -- GRANT ALL PRIVILEGES ON DATABASE "news_crawler" to admin_spider;
 -- GRANT ALL PRIVILEGES ON SCHEMA "news_crawler" to admin_spider;
 -- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "news_crawler" to admin_spider; -- if tables already exist
+-- GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA news_crawler TO admin_spider;
 
 -- DROP TABLE IF EXISTS news_crawler.article CASCADE;
 CREATE TABLE news_crawler.article (
