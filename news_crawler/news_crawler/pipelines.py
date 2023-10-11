@@ -15,14 +15,37 @@ from scrapy.exceptions import DropItem
 class NewsCrawlerPipeline:
 
     def __init__(self):
-        print("HOST", DATABASES['default']['NAME'])
-        # Connect to database
+        # Connect to database and create cursor
         self.connection = psycopg2.connect(host=DATABASES['default']['HOST'], user=DATABASES['default']['USER'], password=DATABASES['default']['PASSWORD'], dbname=DATABASES['default']['NAME'])
-        # Create cursor
         self.cursor = self.connection.cursor()
 
 
     def process_item(self, item, spider):
+        if (spider.name == "latestnewsspider"):
+            item = self.process_latestnews_item(item)
+        elif (spider.name == "threatnewsspider"):
+            item = self.process_threatnews_item(item)
+        return item
+
+
+    def process_threatnews_item(self, item):
+        dt = datetime.now(timezone.utc)
+        insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Processed_Date", "Article_Body") values (%s,%s,%s)"""
+        article_data = (str(item["id"]), dt, str(item["body"]))
+        insert_to_threat_news ="""INSERT INTO news_crawler."Threat_news" ("Article_ID", "Title") values (%s,%s)"""
+        threat_news_data = (str(item["id"]), str(item["title"]))
+        try:
+            self.cursor.execute(insert_to_article, article_data)
+            self.cursor.execute(insert_to_threat_news, threat_news_data)
+            self.connection.commit()
+        except Exception as e:
+            self.connection.rollback()
+            raise DropItem(f"Item could not be inserted: {e}")
+
+        return item
+
+
+    def process_latestnews_item(self, item):
         dt = datetime.now(timezone.utc)
         insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Processed_Date", "Article_Body") values (%s,%s,%s)"""
         article_data = (str(item["id"]), dt, str(item["body"]))
@@ -36,10 +59,9 @@ class NewsCrawlerPipeline:
             self.connection.rollback()
             raise DropItem(f"Item could not be inserted: {e}")
 
-        ## Commit
-        self.connection.commit()
         return item
-    
+
+
     def close_spider(self, spider):
         # Close cursor and connection to database 
         self.cursor.close()

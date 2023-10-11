@@ -64,7 +64,7 @@ DATABASES = {
     'default': {
         'NAME': 'news_crawler',
         'USER': 'admin_spider',
-        'PASSWORD': 'your_database_password',
+        'PASSWORD': 'password',
         'HOST': 'localhost',
         'PORT': '5432',  # Default PostgreSQL port
     }
