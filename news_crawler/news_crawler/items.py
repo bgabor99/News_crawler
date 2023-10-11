@@ -6,8 +6,13 @@
 import scrapy
 
 
-class NewsCrawlerItem(scrapy.Item):
-    # define the fields for your item here like:
+class LatestNewsItem(scrapy.Item):
+    id = scrapy.Field()
+    title = scrapy.Field()
+    body = scrapy.Field()
+
+
+class ThreatNewsItem(scrapy.Item):
     id = scrapy.Field()
     title = scrapy.Field()
     body = scrapy.Field()
