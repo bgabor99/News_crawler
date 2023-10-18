@@ -34,7 +34,7 @@ CREATE TABLE news_crawler."common" (
 	"Body" text,
 	"Content" text,
 	"Author" text,
-	"Date" timestamp with time zone,
+	"Date" text,
 	CONSTRAINT "Latest_news_pk" PRIMARY KEY ("ID")
 );
 -- ddl-end --
