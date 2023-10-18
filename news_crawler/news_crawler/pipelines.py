@@ -32,8 +32,8 @@ class NewsCrawlerPipeline:
         dt = datetime.now(timezone.utc)
         insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
         article_data = (str(item["id"]), str(item["domain"]), dt)
-        insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content") values (%s,%s,%s,%s)"""
-        common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]))
+        insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content", "Author", "Date") values (%s,%s,%s,%s,%s,%s)"""
+        common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]), str(item["author"]), str(item["date"]))
         try:
             self.cursor.execute(insert_to_article, article_data)
             self.cursor.execute(insert_to_common, common_data)
@@ -49,8 +49,8 @@ class NewsCrawlerPipeline:
         dt = datetime.now(timezone.utc)
         insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
         article_data = (str(item["id"]), str(item["domain"]), dt)
-        insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content") values (%s,%s,%s,%s)"""
-        common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]))
+        insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content", "Author", "Date") values (%s,%s,%s,%s,%s,%s)"""
+        common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]), str(item["author"]), str(item["date"]))
         try:
             self.cursor.execute(insert_to_article, article_data)
             self.cursor.execute(insert_to_common, common_data)
