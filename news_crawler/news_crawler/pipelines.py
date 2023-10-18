@@ -28,36 +28,61 @@ class NewsCrawlerPipeline:
         return item
 
 
+    def check_if_article_id_exists(self, item):
+        query="""SELECT * FROM news_crawler.article WHERE article."Article_ID" = (%s)"""
+        data = (str(item["id"]),)
+        self.cursor.execute(query, data)
+        return self.cursor.fetchall()
+    
+
     def process_latestnews_item(self, item):
-        dt = datetime.now(timezone.utc)
-        insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
-        article_data = (str(item["id"]), str(item["domain"]), dt)
-        insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content", "Author", "Date") values (%s,%s,%s,%s,%s,%s)"""
-        common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]), str(item["author"]), str(item["date"]))
         try:
-            self.cursor.execute(insert_to_article, article_data)
-            self.cursor.execute(insert_to_common, common_data)
-            self.connection.commit()
+            # Check if its already in the database
+            result = self.check_if_article_id_exists(item)
+            if result:
+                print("Item already in database: %s" % item['id'])
+            else:
+                dt = datetime.now(timezone.utc)
+                insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
+                article_data = (str(item["id"]), str(item["domain"]), dt)
+                insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content", "Author", "Date") values (%s,%s,%s,%s,%s,%s)"""
+                common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]), str(item["author"]), str(item["date"]))
+                try:
+                    self.cursor.execute(insert_to_article, article_data)
+                    self.cursor.execute(insert_to_common, common_data)
+                    self.connection.commit()
+                except Exception as e:
+                    self.connection.rollback()
+                    raise DropItem(f"Item could not be inserted: {e}")
         except Exception as e:
             self.connection.rollback()
-            raise DropItem(f"Item could not be inserted: {e}")
+            raise DropItem(f"Item could not be selected: {e}")
         
         return item
 
 
     def process_threatnews_item(self, item):
-        dt = datetime.now(timezone.utc)
-        insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
-        article_data = (str(item["id"]), str(item["domain"]), dt)
-        insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content", "Author", "Date") values (%s,%s,%s,%s,%s,%s)"""
-        common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]), str(item["author"]), str(item["date"]))
         try:
-            self.cursor.execute(insert_to_article, article_data)
-            self.cursor.execute(insert_to_common, common_data)
-            self.connection.commit()
+            # Check if its already in the database
+            result = self.check_if_article_id_exists(item)
+            if result:
+                print("Item already in database: %s" % item['id'])
+            else:
+                dt = datetime.now(timezone.utc)
+                insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
+                article_data = (str(item["id"]), str(item["domain"]), dt)
+                insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content", "Author", "Date") values (%s,%s,%s,%s,%s,%s)"""
+                common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]), str(item["author"]), str(item["date"]))
+                try:
+                    self.cursor.execute(insert_to_article, article_data)
+                    self.cursor.execute(insert_to_common, common_data)
+                    self.connection.commit()
+                except Exception as e:
+                    self.connection.rollback()
+                    raise DropItem(f"Item could not be inserted: {e}")
         except Exception as e:
             self.connection.rollback()
-            raise DropItem(f"Item could not be inserted: {e}")
+            raise DropItem(f"Item could not be selected: {e}")
 
         return item
 
