@@ -18,6 +18,8 @@ class LatestNewsSpider(scrapy.Spider):
         article['domain'] = (','.join(self.allowed_domains))
         article['title'] = response.xpath('/html/head/title/text()').get()
         article['body'] = response.xpath('/html/body').get()
-        article['content'] = response.xpath("//div[@class='td-ss-main-content'][1]").get()
+        article['content'] = response.xpath("/div[@class='td-ss-main-content'][1]").get()
+        article['author'] = response.xpath("//header//a[contains(@href, 'author')]/text()[1]").get()
+        article['date'] = response.xpath('//header//time[@datetime]/@datetime[1]').get()
 
         yield article

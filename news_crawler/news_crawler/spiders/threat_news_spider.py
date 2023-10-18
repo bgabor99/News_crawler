@@ -20,5 +20,7 @@ class ThreatNewsSpider(scrapy.Spider):
         article['title'] = response.xpath('/html/head/title/text()').get()
         article['body'] = response.xpath('/html/body').get()
         article['content'] = response.xpath("//div[contains(@class, 'td-post-content')][1]").get()
+        article['author'] = response.xpath("//header//a[contains(@href, 'author')]/text()[1]").get()
+        article['date'] = response.xpath('//header//time[@datetime]/text()[1]').get()
 
         yield article
