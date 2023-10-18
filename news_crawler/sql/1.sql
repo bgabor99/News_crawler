@@ -10,7 +10,7 @@ CREATE SCHEMA IF NOT EXISTS news_crawler; --in news_crawler database
 -- ALTER USER admin_spider WITH PASSWORD 'password'; -- password can be changaed with this query
 -- GRANT ALL PRIVILEGES ON DATABASE "news_crawler" to admin_spider;
 -- GRANT ALL PRIVILEGES ON SCHEMA "news_crawler" to admin_spider;
--- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "news_crawler" to admin_spider; -- if tables already exist
+-- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "news_crawler" to admin_spider; -- if tables are already exist
 -- GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA news_crawler to admin_spider;
 
 -- DROP TABLE IF EXISTS news_crawler.article CASCADE;
@@ -33,6 +33,8 @@ CREATE TABLE news_crawler."common" (
 	"Title" text,
 	"Body" text,
 	"Content" text,
+	"Author" text,
+	"Date" timestamp with time zone,
 	CONSTRAINT "Latest_news_pk" PRIMARY KEY ("ID")
 );
 -- ddl-end --
