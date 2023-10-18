@@ -12,3 +12,5 @@ class NewsCrwalerItem(scrapy.Item):
     title = scrapy.Field()
     body = scrapy.Field()
     content = scrapy.Field()
+    author = scrapy.Field()
+    date = scrapy.Field()
