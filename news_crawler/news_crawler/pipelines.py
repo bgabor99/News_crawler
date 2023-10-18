@@ -28,32 +28,32 @@ class NewsCrawlerPipeline:
         return item
 
 
-    def process_threatnews_item(self, item):
+    def process_latestnews_item(self, item):
         dt = datetime.now(timezone.utc)
-        insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Processed_Date", "Article_Body") values (%s,%s,%s)"""
-        article_data = (str(item["id"]), dt, str(item["body"]))
-        insert_to_threat_news ="""INSERT INTO news_crawler."Threat_news" ("Article_ID", "Title") values (%s,%s)"""
-        threat_news_data = (str(item["id"]), str(item["title"]))
+        insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
+        article_data = (str(item["id"]), str(item["domain"]), dt)
+        insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content") values (%s,%s,%s,%s)"""
+        common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]))
         try:
             self.cursor.execute(insert_to_article, article_data)
-            self.cursor.execute(insert_to_threat_news, threat_news_data)
+            self.cursor.execute(insert_to_common, common_data)
             self.connection.commit()
         except Exception as e:
             self.connection.rollback()
             raise DropItem(f"Item could not be inserted: {e}")
-
+        
         return item
 
 
-    def process_latestnews_item(self, item):
+    def process_threatnews_item(self, item):
         dt = datetime.now(timezone.utc)
-        insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Processed_Date", "Article_Body") values (%s,%s,%s)"""
-        article_data = (str(item["id"]), dt, str(item["body"]))
-        insert_to_latest_news ="""INSERT INTO news_crawler."Latest_news" ("Article_ID", "Title") values (%s,%s)"""
-        latest_news_data = (str(item["id"]), str(item["title"]))
+        insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
+        article_data = (str(item["id"]), str(item["domain"]), dt)
+        insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content") values (%s,%s,%s,%s)"""
+        common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]))
         try:
             self.cursor.execute(insert_to_article, article_data)
-            self.cursor.execute(insert_to_latest_news, latest_news_data)
+            self.cursor.execute(insert_to_common, common_data)
             self.connection.commit()
         except Exception as e:
             self.connection.rollback()

@@ -1,5 +1,5 @@
 import scrapy
-from ..items import ThreatNewsItem
+from ..items import NewsCrwalerItem
 
 
 class ThreatNewsSpider(scrapy.Spider):
@@ -14,9 +14,11 @@ class ThreatNewsSpider(scrapy.Spider):
 
     def parse_article(self, response):
         # Extract article data
-        article = ThreatNewsItem()
+        article = NewsCrwalerItem()
         article['id'] = response.url.split('/')[-2]  # Article ID
+        article['domain'] = (','.join(self.allowed_domains))
         article['title'] = response.xpath('/html/head/title/text()').get()
         article['body'] = response.xpath('/html/body').get()
+        article['content'] = response.xpath("//div[contains(@class, 'td-post-content')][1]").get()
 
         yield article

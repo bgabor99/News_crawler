@@ -6,13 +6,9 @@
 import scrapy
 
 
-class LatestNewsItem(scrapy.Item):
+class NewsCrwalerItem(scrapy.Item):
     id = scrapy.Field()
+    domain = scrapy.Field()
     title = scrapy.Field()
     body = scrapy.Field()
-
-
-class ThreatNewsItem(scrapy.Item):
-    id = scrapy.Field()
-    title = scrapy.Field()
-    body = scrapy.Field()
+    content = scrapy.Field()
