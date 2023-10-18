@@ -1,7 +1,7 @@
 -- -- DROP DATABASE IF EXISTS news_crawler;
 -- CREATE DATABASE news_crawler;
 -- DROP SCHEMA IF EXISTS news_crawler CASCADE;
-CREATE SCHEMA IF NOT EXISTS news_crawler;
+CREATE SCHEMA IF NOT EXISTS news_crawler; --in news_crawler database
 
 -- REASSIGN OWNED BY admin_spider TO postgres;  -- or some other trusted role
 -- DROP OWNED BY admin_spider;
@@ -11,14 +11,14 @@ CREATE SCHEMA IF NOT EXISTS news_crawler;
 -- GRANT ALL PRIVILEGES ON DATABASE "news_crawler" to admin_spider;
 -- GRANT ALL PRIVILEGES ON SCHEMA "news_crawler" to admin_spider;
 -- GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA "news_crawler" to admin_spider; -- if tables already exist
--- GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA news_crawler TO admin_spider;
+-- GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA news_crawler to admin_spider;
 
 -- DROP TABLE IF EXISTS news_crawler.article CASCADE;
 CREATE TABLE news_crawler.article (
 	"ID" serial NOT NULL,
+	"Domain" text NOT NULL,
 	"Article_ID" text NOT NULL,
 	"Processed_Date" timestamp NOT NULL,
-	"Article_Body" text NOT NULL,
 	CONSTRAINT article_pk PRIMARY KEY ("ID"),
 	CONSTRAINT "Unique_Article_ID" UNIQUE ("Article_ID")
 );
@@ -26,41 +26,23 @@ CREATE TABLE news_crawler.article (
 -- ALTER TABLE news_crawler.article OWNER TO postgres;
 -- ddl-end --
 
--- DROP TABLE IF EXISTS news_crawler."Latest_news" CASCADE;
-CREATE TABLE news_crawler."Latest_news" (
+-- DROP TABLE IF EXISTS news_crawler."common" CASCADE;
+CREATE TABLE news_crawler."common" (
 	"ID" serial NOT NULL,
 	"Article_ID" text NOT NULL,
-	"Title" text NOT NULL,
+	"Title" text,
+	"Body" text,
+	"Content" text,
 	CONSTRAINT "Latest_news_pk" PRIMARY KEY ("ID")
 );
 -- ddl-end --
--- ALTER TABLE news_crawler."Latest_news" OWNER TO postgres;
+-- ALTER TABLE news_crawler."common" OWNER TO postgres;
 -- ddl-end --
 
 -- ddl-end --
--- object: "Latest_news_FK" | type: CONSTRAINT --
--- ALTER TABLE news_crawler."Latest_news" DROP CONSTRAINT IF EXISTS "Latest_news_FK" CASCADE;
-ALTER TABLE news_crawler."Latest_news" ADD CONSTRAINT "Latest_news_FK" FOREIGN KEY ("Article_ID")
-REFERENCES news_crawler.article ("Article_ID") MATCH FULL
-ON DELETE NO ACTION ON UPDATE NO ACTION;
--- ddl-end --
-
-
--- DROP TABLE IF EXISTS news_crawler."Threat_news" CASCADE;
-CREATE TABLE news_crawler."Threat_news" (
-	"ID" serial NOT NULL,
-	"Article_ID" text NOT NULL,
-	"Title" text NOT NULL,
-	CONSTRAINT "Threat_news_pk" PRIMARY KEY ("ID")
-);
--- ddl-end --
--- ALTER TABLE news_crawler."Threat_news" OWNER TO postgres;
--- ddl-end --
-
--- ddl-end --
--- object: "Threat_news_FK" | type: CONSTRAINT --
--- ALTER TABLE news_crawler."Threat_news" DROP CONSTRAINT IF EXISTS "Threat_news_FK" CASCADE;
-ALTER TABLE news_crawler."Threat_news" ADD CONSTRAINT "Threat_news_FK" FOREIGN KEY ("Article_ID")
+-- object: "common_FK" | type: CONSTRAINT --
+-- ALTER TABLE news_crawler."common" DROP CONSTRAINT IF EXISTS "common_FK" CASCADE;
+ALTER TABLE news_crawler."common" ADD CONSTRAINT "common_FK" FOREIGN KEY ("Article_ID")
 REFERENCES news_crawler.article ("Article_ID") MATCH FULL
 ON DELETE NO ACTION ON UPDATE NO ACTION;
 -- ddl-end --
