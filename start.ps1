@@ -5,5 +5,6 @@ cd news_crawler\news_crawler\spiders\
 scrapy crawl latestnewsspider
 scrapy crawl threatnewsspider
 scrapy crawl cyberattacknewsspider
+scrapy crawl vulnerabilitynewsspider
 cd ..\..\..
 deactivate
