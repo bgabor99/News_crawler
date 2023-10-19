@@ -7,11 +7,22 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
+import logging
+
 BOT_NAME = "news_crawler"
 
 SPIDER_MODULES = ["news_crawler.spiders"]
 NEWSPIDER_MODULE = "news_crawler.spiders"
 
+
+# Enable logging
+LOG_ENABLED = True
+# Set the log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+LOG_LEVEL = 'INFO'
+# Specify the log file where logs will be saved
+LOG_FILE = '../scrapy.log'
+# Log format
+LOG_FORMAT = '%(asctime)s [%(name)s] %(levelname)s: %(message)s'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = "news_crawler (+http://www.yourdomain.com)"

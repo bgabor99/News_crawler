@@ -10,6 +10,7 @@ import psycopg2
 from datetime import datetime, timezone
 from news_crawler.settings import DATABASES
 from scrapy.exceptions import DropItem
+import logging
 
 
 class NewsCrawlerPipeline:
@@ -40,7 +41,7 @@ class NewsCrawlerPipeline:
             # Check if its already in the database
             result = self.check_if_article_id_exists(item)
             if result:
-                print("Item already in database: %s" % item['id'])
+                logging.info("Item already in exists in the database with this Article_ID: %s" % item['id'])
             else:
                 dt = datetime.now(timezone.utc)
                 insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
@@ -51,11 +52,14 @@ class NewsCrawlerPipeline:
                     self.cursor.execute(insert_to_article, article_data)
                     self.cursor.execute(insert_to_common, common_data)
                     self.connection.commit()
+                    logging.info("Article inserted into database with Article_ID: %s" % item['id'])
                 except Exception as e:
                     self.connection.rollback()
+                    logging.warning("Dropped item because this error occured:: %s" % e)
                     raise DropItem(f"Item could not be inserted: {e}")
         except Exception as e:
             self.connection.rollback()
+            logging.warning("Dropped item because this error occured:: %s" % e)
             raise DropItem(f"Item could not be selected: {e}")
         
         return item
@@ -66,7 +70,7 @@ class NewsCrawlerPipeline:
             # Check if its already in the database
             result = self.check_if_article_id_exists(item)
             if result:
-                print("Item already in database: %s" % item['id'])
+                logging.info("Item already in exists in the database with this Article_ID: %s" % item['id'])
             else:
                 dt = datetime.now(timezone.utc)
                 insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
@@ -77,11 +81,14 @@ class NewsCrawlerPipeline:
                     self.cursor.execute(insert_to_article, article_data)
                     self.cursor.execute(insert_to_common, common_data)
                     self.connection.commit()
+                    logging.info("Article inserted into database with Article_ID: %s" % item['id'])
                 except Exception as e:
                     self.connection.rollback()
+                    logging.warning("Dropped item because this error occured:: %s" % e)
                     raise DropItem(f"Item could not be inserted: {e}")
         except Exception as e:
             self.connection.rollback()
+            logging.warning("Dropped item because this error occured:: %s" % e)
             raise DropItem(f"Item could not be selected: {e}")
 
         return item
