@@ -22,9 +22,7 @@ class NewsCrawlerPipeline:
 
 
     def process_item(self, item, spider):
-        cybersecurityspiders = ['latestnewsspider', 'threatnewsspider', 'cyberattacknewsspider', \
-                                'vulnerabilitynewsspider', 'zerodaynewsspider', 'databreachesnewsspider', \
-                                'cyberainewsspider', 'whatisnewsspider', 'toptennewsspider']
+        cybersecurityspiders = ['cybersecuritynewsspider']
         if (spider.name in cybersecurityspiders):
             item = self.process_cybersecuritynews_item(item)
 
