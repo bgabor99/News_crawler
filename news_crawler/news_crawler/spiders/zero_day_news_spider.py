@@ -1,5 +1,5 @@
 import scrapy
-from ..items import NewsCrwalerItem
+from ..items import NewsCrawlerItem
 import logging
 
 
@@ -17,7 +17,7 @@ class ZeroDayNewsSpider(scrapy.Spider):
 
     def parse_article(self, response):
         # Extract article data
-        article = NewsCrwalerItem()
+        article = NewsCrawlerItem()
         article['id'] = response.url.split('/')[-2]  # Article ID
         article['domain'] = (','.join(self.allowed_domains))
         article['title'] = response.xpath('/html/head/title/text()').get()
