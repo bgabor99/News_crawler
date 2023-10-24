@@ -10,5 +10,6 @@ scrapy crawl zerodaynewsspider
 scrapy crawl databreachesnewsspider
 scrapy crawl cyberainewsspider
 scrapy crawl whatisnewsspider
+scrapy crawl toptennewsspider
 cd ..\..\..
 deactivate
