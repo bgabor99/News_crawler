@@ -1,5 +1,4 @@
 name: News_crawler CI
-image: "python:3.8"
 
 on:
   push:
