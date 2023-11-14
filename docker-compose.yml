@@ -29,7 +29,7 @@ services:
       context: .
       dockerfile: Dockerfile.scrapy
     container_name: scrapy_container
-    restart: unless-stopped
+    restart: on-failure
     environment:
       POSTGRES_USER: admin_spider
       POSTGRES_DB: postgres
