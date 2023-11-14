@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': POSTGRES_DB,
         'USER': POSTGRES_USER,
         'PASSWORD': POSTGRES_PASSWORD,
-        'HOST': 'postgres',
+        'HOST': 'postgres', # service name
         'PORT': POSTGRES_PORT,  # Default PostgreSQL port
     }
 }
