@@ -18,8 +18,21 @@
 ---
 ---
 ## Run this project locally
-- Prerequisite is to have a local postgres server and it is configured with the news_crawler/sql/1.sql file
-- Run start.ps1 powershell script
+## Prerequisites
+- Have a local postgres server and it is configured with the news_crawler/sql/1.sql file
+- Change news_crawler/news_crawler/settings.py DATABASES settings for local usage
+    ```
+    DATABASES = {
+    'default': {
+        'NAME': 'postgres',
+        'USER': 'admin_spider',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',  # Default PostgreSQL port
+    }
+    ```
+## Run
+- start.ps1 powershell script
     - Works only on Windows
 ---
 ## Docker Compose command helper
