@@ -6,8 +6,7 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-
-import logging
+import os
 
 BOT_NAME = "news_crawler"
 
@@ -71,13 +70,19 @@ ROBOTSTXT_OBEY = True
 #    "scrapy.extensions.telnet.TelnetConsole": None,
 #}
 
+# Extract PostgreSQL credentials from environment variables
+POSTGRES_USER = os.environ.get('POSTGRES_USER')
+POSTGRES_PASSWORD = os.environ.get('POSTGRES_PASSWORD')
+POSTGRES_DB = os.environ.get('POSTGRES_DB')
+POSTGRES_PORT = os.environ.get('POSTGRES_PORT')
+
 DATABASES = {
     'default': {
-        'NAME': 'news_crawler',
-        'USER': 'admin_spider',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432',  # Default PostgreSQL port
+        'NAME': POSTGRES_DB,
+        'USER': POSTGRES_USER,
+        'PASSWORD': POSTGRES_PASSWORD,
+        'HOST': 'postgres', # service name
+        'PORT': POSTGRES_PORT,  # Default PostgreSQL port
     }
 }
 

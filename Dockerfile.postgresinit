@@ -1,0 +1,4 @@
+FROM postgres:latest
+
+# Copy the SQL initialization script into the container
+COPY ./news_crawler/sql/1.sql /docker-entrypoint-initdb.d/1.sql
