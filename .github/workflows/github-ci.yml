@@ -25,8 +25,10 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pycodestyle
+        ls -la /../..
         if [ -f ../../requirements.txt ]; then pip install -r ../../requirements.txt; fi
     - name: Pycodestyle run
       run: |
+        ls -la
         # stop the build if there are Python syntax errors or undefined names
-        pycodestyle ../../news_crawler
+        pycodestyle ../../news_crawler/
