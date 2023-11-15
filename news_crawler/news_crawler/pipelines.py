@@ -17,9 +17,13 @@ class NewsCrawlerPipeline:
 
     def __init__(self):
         # Connect to database and create cursor
-        self.connection = psycopg2.connect(host=DATABASES['default']['HOST'], user=DATABASES['default']['USER'], password=DATABASES['default']['PASSWORD'], dbname=DATABASES['default']['NAME'])
+        self.connection = psycopg2.connect(
+            host=DATABASES['default']['HOST'],
+            user=DATABASES['default']['USER'],
+            password=DATABASES['default']['PASSWORD'],
+            dbname=DATABASES['default']['NAME']
+        )
         self.cursor = self.connection.cursor()
-
 
     def process_item(self, item, spider):
         cybersecurityspiders = ['cybersecuritynewsspider']
@@ -28,34 +32,54 @@ class NewsCrawlerPipeline:
 
         return item
 
-
     def check_if_article_id_exists(self, item):
-        query="""SELECT * FROM news_crawler.article WHERE article."Article_ID" = (%s)"""
+        query = """SELECT * FROM news_crawler.article
+                WHERE article."Article_ID" = (%s)"""
         data = (str(item["id"]),)
         self.cursor.execute(query, data)
         return self.cursor.fetchall()
-
 
     def process_cybersecuritynews_item(self, item):
         try:
             # Check if its already in the database
             result = self.check_if_article_id_exists(item)
             if result:
-                logging.info("Item already in exists in the database with this Article_ID: %s" % item['id'])
+                logging.info("Item already in exists in the database \
+                             with this Article_ID: %s" % item['id'])
             else:
                 dt = datetime.now(timezone.utc)
-                insert_to_article ="""INSERT INTO news_crawler.article ("Article_ID", "Domain", "Processed_Date") values (%s,%s,%s)"""
-                article_data = (str(item["id"]), str(item["domain"]), dt)
-                insert_to_common ="""INSERT INTO news_crawler."common" ("Article_ID", "Title", "Body", "Content", "Author", "Date") values (%s,%s,%s,%s,%s,%s)"""
-                common_data = (str(item["id"]), str(item["title"]), str(item["body"]), str(item["content"]), str(item["author"]), str(item["date"]))
+                insert_to_article = """INSERT INTO news_crawler.article \
+                                    ("Article_ID",
+                                    "Domain",
+                                    "Processed_Date")
+                                    values (%s,%s,%s)"""
+                article_data = (str(item["id"]),
+                                str(item["domain"]),
+                                dt)
+                insert_to_common = """INSERT INTO news_crawler."common"
+                                    ("Article_ID", "Title",
+                                    "Body", "Content", "Author", "Date")
+                                    values (%s,%s,%s,%s,%s,%s)"""
+                common_data = (str(item["id"]),
+                               str(item["title"]),
+                               str(item["body"]),
+                               str(item["content"]),
+                               str(item["author"]),
+                               str(item["date"]))
                 try:
                     self.cursor.execute(insert_to_article, article_data)
                     self.cursor.execute(insert_to_common, common_data)
                     self.connection.commit()
-                    logging.info("Article inserted into database with Article_ID: %s" % item['id'])
+                    logging.info(
+                        "Article inserted into"
+                        "database with Article_ID: %s" % item['id']
+                        )
                 except Exception as e:
                     self.connection.rollback()
-                    logging.warning("Dropped item because this error occured:: %s" % e)
+                    logging.warning(
+                        "Dropped item"
+                        "because this error occured:: %s" % e
+                        )
                     raise DropItem(f"Item could not be inserted: {e}")
         except Exception as e:
             self.connection.rollback()
@@ -63,9 +87,8 @@ class NewsCrawlerPipeline:
             raise DropItem(f"Item could not be selected: {e}")
 
         return item
-    
 
     def close_spider(self, spider):
-        # Close cursor and connection to database 
+        # Close cursor and connection to database
         self.cursor.close()
         self.connection.close()
