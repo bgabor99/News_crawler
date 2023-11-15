@@ -23,12 +23,12 @@
 - Change news_crawler/news_crawler/settings.py DATABASES settings for local usage
     ```
     DATABASES = {
-    'default': {
-        'NAME': 'postgres',
-        'USER': 'admin_spider',
-        'PASSWORD': 'password',
-        'HOST': 'localhost',
-        'PORT': '5432',  # Default PostgreSQL port
+        'default': {
+            'NAME': 'postgres',
+            'USER': 'admin_spider',
+            'PASSWORD': 'password',
+            'HOST': 'localhost',
+            'PORT': '5432',  # Default PostgreSQL port
     }
     ```
 ## Run
