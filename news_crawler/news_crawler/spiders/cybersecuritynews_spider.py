@@ -22,8 +22,9 @@ class CyberSecurityNewsSpider(CrawlSpider):
                 r'author',
                 r'\?=',
                 r'\?s=',
-                r'filter'
-            ]  # 'page' could be also? CHECK TODO
+                r'filter',
+                r'page'
+            ]
             ),
             callback='parse_item',
             follow=True),
