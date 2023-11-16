@@ -5,25 +5,18 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors.lxmlhtml import LxmlLinkExtractor
 
 
-class CyberSecurityNewsSpider(CrawlSpider):
-    name = "cybersecuritynewsspider"
-    allowed_domains = ["cybersecuritynews.com"]
-    start_urls = ["https://cybersecuritynews.com"]
+class ThaHackerNewsSpider(CrawlSpider):
+    name = "thehackernewsspider"
+    allowed_domains = ["thehackernews.com"]
+    start_urls = ["https://thehackernews.com"]
 
     rules = (
         # Extract and follow all links!
         Rule(LxmlLinkExtractor(
             unique=True,
             deny=[
-                r'author',
-                r'\?amp',
-                r'\?noamp',
-                r'tag',
-                r'author',
-                r'\?=',
-                r'\?s=',
-                r'filter',
-                r'page'
+                r'search',
+                r'sales'
             ]
             ),
             callback='parse_item',
@@ -38,7 +31,7 @@ class CyberSecurityNewsSpider(CrawlSpider):
         # Extract article data
         article = NewsCrawlerItem()
         article['id'] = \
-            response.url.split(self.start_urls[0], 1)[1]  # Article ID
+            response.url.split(self.allowed_domains[0], 1)[1]  # Article ID
         article['domain'] = \
             (','.join(self.allowed_domains))
         article['title'] = \
@@ -47,13 +40,13 @@ class CyberSecurityNewsSpider(CrawlSpider):
             response.xpath('/html/body').get()
         article['content'] = \
             response.xpath(
-                "//div[contains(@class, 'td-post-content')][1]"
+                "//div[contains(@class, 'articlebody')][1]"
             ).get()
         article['author'] = \
             response.xpath(
-                "//header//a[contains(@href, 'author')]/text()[1]"
+                "//span[@class='p-author']//i[1]"
             ).get()
         article['date'] = \
-            response.xpath('//header//time[@datetime]/text()[1]').get()
+            response.xpath("//span[@class='p-author']//i[2]").get()
 
         yield article

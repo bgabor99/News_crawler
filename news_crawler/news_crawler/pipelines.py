@@ -26,9 +26,9 @@ class NewsCrawlerPipeline:
         self.cursor = self.connection.cursor()
 
     def process_item(self, item, spider):
-        cybersecurityspiders = ['cybersecuritynewsspider']
-        if (spider.name in cybersecurityspiders):
-            item = self.process_cybersecuritynews_item(item)
+        used_spiders = ['cybersecuritynewsspider', 'thehackernewsspider']
+        if (spider.name in used_spiders):
+            item = self.process_news_item(item)
 
         return item
 
@@ -39,7 +39,7 @@ class NewsCrawlerPipeline:
         self.cursor.execute(query, data)
         return self.cursor.fetchall()
 
-    def process_cybersecuritynews_item(self, item):
+    def process_news_item(self, item):
         try:
             # Check if its already in the database
             result = self.check_if_article_id_exists(item)
