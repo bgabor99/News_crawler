@@ -7,6 +7,6 @@ WORKDIR /usr/src/app
 COPY . /usr/src/app
 
 RUN pip3 install --no-cache-dir -r requirements.txt
-RUN chmod +x /usr/src/app/run.sh
+# RUN chmod +x /usr/src/app/run.sh
 
-ENTRYPOINT ["/usr/src/app/run.sh"]
+# ENTRYPOINT ["/usr/src/app/run.sh"]
