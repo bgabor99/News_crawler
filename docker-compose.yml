@@ -9,8 +9,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - local_pgdata:/var/lib/postgresql/data
 
@@ -21,8 +21,8 @@ services:
     ports:
       - "8888:80"
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
 
   scrapy:
     build:
@@ -31,9 +31,9 @@ services:
     container_name: scrapy_container
     restart: on-failure
     environment:
-      POSTGRES_USER: admin_spider
+      POSTGRES_CRAWL_USER: ${POSTGRES_CRAWL_USER}
       POSTGRES_DB: postgres
-      POSTGRES_PASSWORD: password
+      POSTGRES_CRAWL_PASSWORD: ${POSTGRES_CRAWL_PASSWORD}
       POSTGRES_PORT: 5432
     volumes:
       - ./news_crawler:/app
