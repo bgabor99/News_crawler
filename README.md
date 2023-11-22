@@ -44,6 +44,7 @@
             'PASSWORD': 'password',
             'HOST': 'localhost',
             'PORT': '5432',  # Default PostgreSQL port
+        }
     }
     ```
 ## Run
