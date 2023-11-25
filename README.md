@@ -44,6 +44,7 @@
             'PASSWORD': 'password',
             'HOST': 'localhost',
             'PORT': '5432',  # Default PostgreSQL port
+        }
     }
     ```
 ## Run
@@ -60,3 +61,11 @@
 ## Scrapy command helper
 - Start a new scrapy project: ```scrapy startproject <project_name>```
 - Run a spider: ```scrapy crawl <spider_name>```
+---
+## Troubleshoot
+- Delete the docker images too and build again
+    - ```docker compose down -v```
+    - ```docker rmi --force $(docker images | grep -E 'news_crawler-scrapy|news_crawler-postgres|dpage/pgadmin4')```
+    - ```docker compose --env-file .env up --build```
+- In case of ```exec /usr/src/app/run.sh: no such file or directory``` error check the end of line sequence of this file
+    - It needs to be in LF

@@ -33,34 +33,36 @@ class NewsCrawlerPipeline:
         return item
 
     def check_if_article_id_exists(self, item):
+        article_id = str(item["domain"]) + str(item["id"])
         query = """SELECT * FROM news_crawler.article
                 WHERE article."Article_ID" = (%s)"""
-        data = (str(item["id"]),)
+        data = (article_id,)
         self.cursor.execute(query, data)
         return self.cursor.fetchall()
 
     def process_news_item(self, item):
         try:
+            dt = datetime.now(timezone.utc)
+            article_id = str(item["domain"]) + str(item["id"])
             # Check if its already in the database
             result = self.check_if_article_id_exists(item)
             if result:
                 logging.info("Item already in exists in the database \
-                             with this Article_ID: %s" % item['id'])
+                             with this Article_ID: %s" % article_id)
             else:
-                dt = datetime.now(timezone.utc)
                 insert_to_article = """INSERT INTO news_crawler.article \
                                     ("Article_ID",
                                     "Domain",
                                     "Processed_Date")
                                     values (%s,%s,%s)"""
-                article_data = (str(item["id"]),
+                article_data = (article_id,
                                 str(item["domain"]),
                                 dt)
                 insert_to_common = """INSERT INTO news_crawler."common"
                                     ("Article_ID", "Title",
                                     "Body", "Content", "Author", "Date")
                                     values (%s,%s,%s,%s,%s,%s)"""
-                common_data = (str(item["id"]),
+                common_data = (article_id,
                                str(item["title"]),
                                str(item["body"]),
                                str(item["content"]),
@@ -71,13 +73,13 @@ class NewsCrawlerPipeline:
                     self.cursor.execute(insert_to_common, common_data)
                     self.connection.commit()
                     logging.info(
-                        "Article inserted into"
-                        "database with Article_ID: %s" % item['id']
+                        "Article inserted into "
+                        "database with Article_ID: %s" % article_id
                         )
                 except Exception as e:
                     self.connection.rollback()
                     logging.warning(
-                        "Dropped item"
+                        "Dropped item "
                         "because this error occured:: %s" % e
                         )
                     raise DropItem(f"Item could not be inserted: {e}")

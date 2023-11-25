@@ -16,7 +16,9 @@ class ThaHackerNewsSpider(CrawlSpider):
             unique=True,
             deny=[
                 r'search',
-                r'sales'
+                r'sales',
+                r'page',
+                r'images'
             ]
             ),
             callback='parse_item',
