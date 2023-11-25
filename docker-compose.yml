@@ -6,6 +6,12 @@ services:
       dockerfile: Dockerfile.postgresinit
     container_name: postgres_container
     restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
     ports:
       - "5432:5432"
     environment:
@@ -23,6 +29,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - postgres
 
   scrapy:
     build:
@@ -38,7 +46,8 @@ services:
     volumes:
       - ./news_crawler:/app
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
 
 volumes:
   local_pgdata:
