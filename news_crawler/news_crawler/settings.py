@@ -92,6 +92,7 @@ DATABASES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     "news_crawler.pipelines.NewsCrawlerPipeline": 300,
+    "news_crawler.pipelines.InputPageCrawlerPipeline": 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
