@@ -38,7 +38,7 @@ class CyberSecurityNewsSpider(CrawlSpider):
         # Extract article data
         article = NewsCrawlerItem()
         article['id'] = \
-            response.url.split(self.start_urls[0], 1)[1]  # Article ID
+            response.url.split(self.start_urls[0], 1)[1]  # Page ID
         article['domain'] = \
             (','.join(self.allowed_domains))
         article['title'] = \
