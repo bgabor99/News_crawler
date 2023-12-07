@@ -8,6 +8,39 @@ from scrapy import signals
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
 
+import asyncio
+
+from scrapy.exceptions import IgnoreRequest
+from scrapy.http import Request
+from scrapy import signals
+from scrapy.spiders import Spider
+from scrapy.utils.project import get_project_settings
+
+
+class ProcessQueueMiddleware:
+    def __init__(self):
+        self.queue = asyncio.Queue()
+
+    def process_request(self, request, spider):
+        while not self.queue.empty():
+            try:
+                domain, url = self.queue.get()
+                print("GET FROM QUEUE")
+
+                # Check if the domain is already being processed
+                if request.urlparse(request.url).hostname == domain:
+                    continue  # Skip URLs that are already being processed
+
+            except asyncio.QueueEmpty():
+                break
+
+            # Create a new request object for the URL
+            request = Request(url, callback=spider.parse)
+            request.meta["domain"] = domain
+
+            yield request
+
+
 
 class NewsCrawlerSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
