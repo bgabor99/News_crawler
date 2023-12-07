@@ -56,18 +56,18 @@ class NewsCrawlerPipeline:
                                     "Processed_Date")
                                     values (%s,%s,%s)"""
                 common_data = (page_id,
-                                str(item["domain"]),
-                                dt)
+                               str(item["domain"]),
+                               dt)
                 insert_to_article = """INSERT INTO news_crawler.article
                                     ("Page_ID", "Title",
                                     "Body", "Content", "Author", "Date")
                                     values (%s,%s,%s,%s,%s,%s)"""
                 article_data = (page_id,
-                               str(item["title"]),
-                               str(item["body"]),
-                               str(item["content"]),
-                               str(item["author"]),
-                               str(item["date"]))
+                                str(item["title"]),
+                                str(item["body"]),
+                                str(item["content"]),
+                                str(item["author"]),
+                                str(item["date"]))
                 try:
                     self.cursor.execute(insert_to_common, common_data)
                     self.cursor.execute(insert_to_article, article_data)
@@ -96,10 +96,10 @@ class NewsCrawlerPipeline:
         self.connection.close()
 
 
-
 class InputPageCrawlerPipeline:
-    
+
     def __init__(self):
+        print("INIT")
         # Connect to database and create cursor
         self.connection = psycopg2.connect(
             host=DATABASES['default']['HOST'],
@@ -108,8 +108,10 @@ class InputPageCrawlerPipeline:
             dbname=DATABASES['default']['NAME']
         )
         self.cursor = self.connection.cursor()
+        print('INIT DONE')
 
     def process_item(self, item, spider):
+        print('PROCESS ITEM')
         used_spiders = ['inputpagespider']
         if (spider.name in used_spiders):
             item = self.process_page_item(item)
@@ -131,7 +133,7 @@ class InputPageCrawlerPipeline:
             # Check if its already in the database
             result = self.check_if_page_id_exists(item)
             if result:
-                logging.info("Item already in exists in the database \
+                logging.info("Item already exists in the database \
                              with this Page_ID: %s" % page_id)
             else:
                 insert_to_common = """INSERT INTO news_crawler.common \
@@ -140,13 +142,13 @@ class InputPageCrawlerPipeline:
                                     "Processed_Date")
                                     values (%s,%s,%s)"""
                 common_data = (page_id,
-                                str(item["domain"]),
-                                dt)
+                               str(item["domain"]),
+                               dt)
                 insert_to_page = """INSERT INTO news_crawler."page"
                                     ("Page_ID", "Page")
                                     values (%s,%s)"""
                 page_data = (page_id,
-                               str(item["page"]))
+                             str(item["page"]))
                 try:
                     self.cursor.execute(insert_to_common, common_data)
                     self.cursor.execute(insert_to_page, page_data)

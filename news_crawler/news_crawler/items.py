@@ -15,6 +15,7 @@ class NewsCrawlerItem(scrapy.Item):
     author = scrapy.Field()
     date = scrapy.Field()
 
+
 class PageCrawlerItem(scrapy.Item):
     id = scrapy.Field()
     domain = scrapy.Field()

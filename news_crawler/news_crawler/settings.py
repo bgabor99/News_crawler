@@ -80,19 +80,20 @@ POSTGRES_PORT = os.environ.get('POSTGRES_PORT')
 
 DATABASES = {
     'default': {
-        'NAME': POSTGRES_DB,
-        'USER': POSTGRES_USER,
-        'PASSWORD': POSTGRES_PASSWORD,
-        'HOST': 'postgres',  # service name
-        'PORT': POSTGRES_PORT,  # Default PostgreSQL port
+        'NAME': 'postgres',
+        'USER': 'admin_spider',
+        'PASSWORD': 'password',
+        'HOST': 'localhost',
+        'PORT': '5432',  # Default PostgreSQL port
     }
 }
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "news_crawler.pipelines.NewsCrawlerPipeline": 300,
+    # "news_crawler.pipelines.NewsCrawlerPipeline": 300,
     "news_crawler.pipelines.InputPageCrawlerPipeline": 400,
+    "news_crawler.middlewares.ProcessQueueMiddleware" : 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
